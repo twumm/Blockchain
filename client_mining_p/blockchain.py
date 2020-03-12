@@ -140,12 +140,18 @@ def mine():
     proof = blockchain.valid_proof(block_string, data['proof'])
     # block = blockchain.new_block(data.proof, previous_hash)
     if proof:
-      # previous_hash = blockchain.hash(blockchain.last_block)
-      # new_proof = blockchain.proo
-      response = {"message": 'New Block Forged'}
+      previous_hash = blockchain.hash(blockchain.last_block)
+      block = blockchain.new_block(proof, previous_hash)
+      response = {
+        'message': 'New Block Forged',
+        'index': block['index'],
+        'transactions': block['transactions'],
+        'proof': block['proof'],
+        'previous_hash': block['previous_hash']
+      }
       return jsonify(response), 200
     else:
-      response = {"message": 'Block not Forged'}
+      response = {"message": 'Proof was invalid or already submitted'}
       return jsonify(response), 400
 
 
